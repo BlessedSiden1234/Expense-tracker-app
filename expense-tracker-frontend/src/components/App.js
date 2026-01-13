@@ -30,7 +30,7 @@ import * as routes from "../constants/routes";
 import * as db from "../firebase/db";
 import * as utils from "./Util";
 import * as analytics from "./../analytics/analytics";
-
+const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
 
 class App extends Component {
@@ -78,7 +78,7 @@ class App extends Component {
             // Fetch user settings
             console.log("Fetching settings...");
             const settingsRes = await fetch(
-                `http://localhost:7071/api/getSettingsForUser?userId=${authUser.userId}`
+                `${baseUrl}/api/getSettingsForUser?userId=${authUser.userId}`
             );
             const settingsData = await settingsRes.json();
             if (settingsRes.ok) {
@@ -91,7 +91,7 @@ class App extends Component {
             // Fetch expenses
             console.log("Fetching expenses...");
             // Fetch expenses
-            const expensesRes = await fetch(`http://localhost:7071/api/getExpenses?userId=${authUser.userId}`);
+            const expensesRes = await fetch(`${baseUrl}/api/getExpenses?userId=${authUser.userId}`);
             const expensesData = await expensesRes.json();
             if (expensesRes.ok) {
                 const normalizedExpenses = utils.normalizeExpenses(expensesData); // <-- use helper here
@@ -101,7 +101,7 @@ class App extends Component {
             // Fetch loanss
             console.log("Fetching loans...");
             const loansRes = await fetch(
-                `http://localhost:7071/api/getLoans?userId=${authUser.userId}`
+                `${baseUrl}/api/getLoans?userId=${authUser.userId}`
             );
             const loansData = await loansRes.json();
             if (loansRes.ok) {
@@ -114,7 +114,7 @@ class App extends Component {
             // Fetch savings
             console.log("Fetching savings...");
             const savingsRes = await fetch(
-                `http://localhost:7071/api/getSavings?userId=${authUser.userId}`
+                `${baseUrl}/api/getSavings?userId=${authUser.userId}`
             );
             const savingsData = await savingsRes.json();
             if (savingsRes.ok) {

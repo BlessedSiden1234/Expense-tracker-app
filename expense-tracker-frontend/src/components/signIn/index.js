@@ -17,6 +17,7 @@ import statsMobile from "./../../assets/images/STATISTICS_MOBILE.png";
 import travel from "./../../assets/images/travel.png";
 
 import firebase from "firebase";
+const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
 const SignInPage = ({ history, onLoginSuccess }) => (
     <div>
@@ -90,7 +91,7 @@ class SignInForm extends Component {
 
         try {
             const response = await fetch(
-                "http://localhost:7071/api/loginUser", // your Azure Function login endpoint
+                `${baseUrl}/api/loginUser`, // your Azure Function login endpoint
                 {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },

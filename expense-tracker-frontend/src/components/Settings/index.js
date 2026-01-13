@@ -7,6 +7,7 @@ import * as routes from "../../constants/routes";
 import userProfile from "./../../assets/images/bzz.png";
 import * as db from "../../firebase/db";
 import * as analytics from "./../../analytics/analytics";
+const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
 class SettingsPage extends Component {
     constructor(props) {
@@ -86,7 +87,7 @@ class SettingsPage extends Component {
     console.log("user:", this.props.user);
     console.log("userId:", this.props.user.userId);
 
-    fetch("http://localhost:7071/api/updateSettingsForUser", {
+    fetch(`${baseUrl}/api/updateSettingsForUser`, {
         method: "POST", // matches your SignUpForm style
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

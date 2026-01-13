@@ -10,6 +10,7 @@ import * as db from "../../firebase/db";
 
 import "react-datepicker/dist/react-datepicker.css";
 import "../../assets/css/form.css";
+const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
 class AddLoanForm extends Component {
     constructor(props) {
@@ -51,7 +52,7 @@ class AddLoanForm extends Component {
 
     console.log("🚀 Sending loan payload:", payload);
 
-   fetch("http://localhost:7071/api/addLoan", {
+   fetch(`${baseUrl}/api/addLoan`, {
     method: "POST",
     headers: {
         "Content-Type": "application/json"

@@ -7,6 +7,7 @@ import $ from "jquery";
 import Loader from "./../Common/Loader";
 
 import * as db from "../../firebase/db";
+const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
 import "react-datepicker/dist/react-datepicker.css";
 import "./styles/form.css";
@@ -43,7 +44,7 @@ class AddExpenseForm extends Component {
     };
     console.log("🚀 Sending expense payload:", payload);
 
-    fetch("http://localhost:7071/api/addExpense", {
+    fetch(`${baseUrl}/api/addExpense`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

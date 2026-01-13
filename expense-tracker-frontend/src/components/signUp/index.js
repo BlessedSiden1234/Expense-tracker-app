@@ -4,6 +4,7 @@ import { auth, db } from "../../firebase";
 import * as routes from "../../constants/routes";
 
 import * as analytics from "./../../analytics/analytics";
+const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
 const SignUpPage = ({ history }) => (
     <div>
@@ -47,7 +48,7 @@ class SignUpForm extends Component {
 
         const userId = Date.now().toString(); // temporary unique id
 
-        fetch("http://localhost:7071/api/createUser", {
+        fetch(`${baseUrl}/api/createUser`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

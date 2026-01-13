@@ -4,6 +4,7 @@ import moment from "moment";
 import * as utils from "./../Util";
 
 import EditLoanPopup from "./EditLoanPopup";
+const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
 class LoanRow extends Component {
     constructor(props) {
@@ -27,7 +28,7 @@ handleClick(e) {
     const userId = this.props.user.userId;
     const loanId = this.props.loan.value.id;
 
-    fetch("http://localhost:7071/api/deleteLoan", {
+    fetch(`${baseUrl}/api/deleteLoan`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

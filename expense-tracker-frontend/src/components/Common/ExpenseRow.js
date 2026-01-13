@@ -3,6 +3,7 @@ import * as utils from "../Util";
 import moment from "moment";
 
 import EditExpensePopup from "./EditExpensePopup";
+const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
 class ExpenseRow extends Component {
     constructor(props) {
@@ -23,7 +24,7 @@ class ExpenseRow extends Component {
 
         try {
             const res = await fetch(
-                `http://localhost:7071/api/deleteExpense?userId=${this.props.user.userId}&expenseId=${this.props.expense.id}`,
+                `${baseUrl}api/deleteExpense?userId=${this.props.user.userId}&expenseId=${this.props.expense.id}`,
                 { method: "DELETE" }
             );
             if (!res.ok) {

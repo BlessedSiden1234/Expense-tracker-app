@@ -10,6 +10,7 @@ import * as firebase from "../../firebase/firebase";
 
 import "react-datepicker/dist/react-datepicker.css";
 import "../Home/styles/form.css";
+const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
 class EditExpenseForm extends Component {
    constructor(props) {
@@ -48,7 +49,7 @@ async handleSubmit(event) {
 
         try {
             const response = await fetch(
-                "http://localhost:7071/api/updateExpense", // your Azure Function
+                `${baseUrl}/api/updateExpense`, // your Azure Function
                 {
                     method: "PUT",  // or "POST" depending on your function route
                     headers: { "Content-Type": "application/json" },
