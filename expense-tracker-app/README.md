@@ -11,19 +11,21 @@ This repository contains the **complete Expense Tracker application**, including
 ## Repository Structure 📁
 
 ```text
-expense-tracker/
+expense-tracker-app/
 │
-├── frontend/
+├── exprense-tracker-frontend/
 │   ├── src/
 │   ├── public/
 │   ├── package.json
 │   └── .env.local
 │
-├── backend/
-│   ├── createUser/
-│   ├── loginUser/
-│   ├── addExpense/
-│   ├── createSettingsForUser/
+├── expense-tracker-backend/
+    ├── src/
+        ├── functions/
+        │   ├── createUser/
+        │   ├── loginUser/
+        │   ├── addExpense/
+        │   ├── createSettingsForUser/
 │   ├── host.json
 │   ├── local.settings.json
 │   ├── package.json
