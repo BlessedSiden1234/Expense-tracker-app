@@ -77,9 +77,9 @@ expense-tracker-app/
 - Partition key: `/userId`
 
 📸 Screenshots:
-- `/screenshots/backend/cosmos-create.png`
-- `/screenshots/backend/cosmos-container.png`
-
+![Azure CosmosDB NoSQL create](screenshots/backend/cosmos-create.png)
+![CosmosDB Deploying](screenshots/backend/deploying.png)
+![Creating Database & ContainerId](screenshots/backend/container.png)
 ---
 
 ### 2️⃣ Copy Cosmos DB Connection String
@@ -88,7 +88,7 @@ expense-tracker-app/
 - Copy **Primary Connection String**
 
 📸 Screenshot:
-- `/screenshots/backend/cosmos-connection-string.png`
+![Copy Connection String](screenshots/backend/connection.png)
 
 ---
 
@@ -99,7 +99,7 @@ expense-tracker-app/
 - OS: **Linux**
 
 📸 Screenshot:
-- `/screenshots/backend/function-app-create.png`
+![Create Function App](screenshots/backend/create-function.png)
 
 ---
 
@@ -112,7 +112,8 @@ COSMOS_CONNECTION=AccountEndpoint=...;AccountKey=...
 ```
 
 📸 Screenshot:
-- `/screenshots/backend/app-settings.png`
+![Environment Variable Settings](screenshots/backend/environ1.png)
+![Add Connection String ](screenshots/backend/environ2.png)
 
 ---
 
@@ -123,10 +124,16 @@ COSMOS_CONNECTION=AccountEndpoint=...;AccountKey=...
 - Manage functions remotely
 
 📸 Screenshots:
-- `/screenshots/backend/vscode-azure-connect.png`
-- `/screenshots/backend/vscode-functions.png`
+![Install Azue Tools Extension ](screenshots/backend/func1.png)
+![Manage functions ](screenshots/backend/func2.png)
+![Deploy functions remotely ](screenshots/backend/func3.png)
 
 ---
+
+### Clone Repository
+bash
+git clone https://github.com/BlessedSiden1234/Expense-tracker-app.git
+cd expense-tracker/backend
 
 ### 6️⃣ Run Backend Locally
 
