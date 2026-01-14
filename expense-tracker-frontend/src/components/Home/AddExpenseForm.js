@@ -7,10 +7,12 @@ import $ from "jquery";
 import Loader from "./../Common/Loader";
 
 import * as db from "../../firebase/db";
-const baseUrl = process.env.REACT_APP_API_BASE_URL;
+
 
 import "react-datepicker/dist/react-datepicker.css";
 import "./styles/form.css";
+
+const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
 class AddExpenseForm extends Component {
     constructor(props) {

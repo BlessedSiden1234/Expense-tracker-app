@@ -9,11 +9,11 @@ import * as analytics from "./../../analytics/analytics";
 import logo from "./../../assets/images/logo.png";
 import homeScreen from "./../../assets/images/Home1.png";
 import monthScreen from "./../../assets/images/daily.png";
-import statisticsScreen from "./../../assets/images/STATISTICS_NIGHT_MODE.png";
+import statisticsScreen from "./../../assets/images/stat.png";
 import savingsScreen from "./../../assets/images/SAVINGS_NIGHT.png";
 import homeMobile from "./../../assets/images/HOME_MOBILE.png";
 import monthMobile from "./../../assets/images/MONTH_MOBILE.png";
-import statsMobile from "./../../assets/images/STATISTICS_MOBILE.png";
+import statsMobile from "./../../assets/images/stat.png";
 import travel from "./../../assets/images/travel.png";
 
 import firebase from "firebase";
@@ -90,8 +90,10 @@ class SignInForm extends Component {
         this.setState({ error: null });
 
         try {
+            console.log("➡️ Submitting login request for:", email);
+
             const response = await fetch(
-                `${baseUrl}/api/loginUser`, // your Azure Function login endpoint
+                `${baseUrl}/api/loginUser`,
                 {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -99,29 +101,44 @@ class SignInForm extends Component {
                 }
             );
 
-            const data = await response.json();
+            console.log("📡 Raw response:", response);
+
+            // Try reading text first (safer for 404 / empty body)
+            const text = await response.text();
+            console.log("📄 Response text:", text);
+
+            // If response is OK, parse JSON
+            let data = {};
+            if (text) {
+                try {
+                    data = JSON.parse(text);
+                } catch (parseError) {
+                    console.error("❌ JSON parse error:", parseError);
+                }
+            }
 
             if (!response.ok) {
-                // show backend error message
+                console.error("❌ Backend returned error:", data);
                 throw new Error(data.error || "Failed to sign in");
             }
 
-            // Save logged‑in user info (adjust key as you like)
+            console.log("✅ Login successful, data:", data);
+
             localStorage.setItem("user", JSON.stringify(data));
 
-            // Notify App that login succeeded
             if (this.props.onLoginSuccess) {
                 this.props.onLoginSuccess(data);
             }
 
-            // clear state & redirect
             this.setState(() => ({ ...INITIAL_STATE }));
             history.push(routes.HOME);
 
         } catch (error) {
+            console.error("❌ onSubmit catch error:", error);
             this.setState(byPropKey("error", error));
         }
     };
+
 
 
     render() {
@@ -191,7 +208,7 @@ class SignInForm extends Component {
                                     <Link to={routes.PASSWORD_FORGET}>Forgot password?</Link>
                                 </p>
 
-                              
+
 
                                 {error && <p>{error.message}</p>}
                             </form>
@@ -226,7 +243,23 @@ class SignInForm extends Component {
                         )}
                     </div>
                 </div>
-               
+
+                <div className="row landing-stats-section" style={fullHeight}>
+                    <div className="col-sm-12 col-md-8" style={areaPadding}>
+                        {window.screen.width > 720 ? (
+                            <img src={statisticsScreen} style={homeImgStyle} />
+                        ) : (
+                            <img src={statsMobile} style={homeImgStyle} width="auto" height="auto" />
+                        )}
+                    </div>
+                    <div className="col-sm-12 col-md-4">
+                        <div className="landing-home-section-title" style={{ fontSize: "2.7em" }}>
+                            Customize your experience in one place. <hr />
+                            Manage settings like font style, currency, and display preferences to match how you work.
+                        </div>
+                    </div>
+                </div>
+
             </div>
         );
     }
