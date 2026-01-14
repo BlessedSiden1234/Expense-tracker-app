@@ -2,10 +2,22 @@ const { app } = require("@azure/functions");
 const { CosmosClient } = require("@azure/cosmos");
 
 app.http("updateSettingsForUser", {
-  methods: ["POST"],
-  authLevel: "function",
+  methods: ["POST", "OPTIONS"], // ✅ include OPTIONS for preflight
+  authLevel: "anonymous",
   handler: async (request, context) => {
     context.log("updateSettingsForUser called with body:", request.body);
+
+    // ✅ Handle CORS preflight
+    if (request.method === "OPTIONS") {
+      return {
+        status: 204,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "POST, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type",
+        },
+      };
+    }
 
     try {
       const body = await request.json();
@@ -13,9 +25,9 @@ app.http("updateSettingsForUser", {
         userId,
         font = "sans-serif",
         mode = "day",
-        currency = "Indian Rupees",
+        currency = "US Dollars",
         travelMode = "off",
-        fromCurrency = "Indian Rupees",
+        fromCurrency = "US Dollars",
         monthLimit = 15000,
         editedCategories = {
           Food: "",
@@ -36,6 +48,7 @@ app.http("updateSettingsForUser", {
       if (!userId) {
         return {
           status: 400,
+          headers: { "Access-Control-Allow-Origin": "*" },
           jsonBody: { error: "Missing userId" },
         };
       }
@@ -45,7 +58,7 @@ app.http("updateSettingsForUser", {
         .database("expenseTrackerDB")
         .container("expenses");
 
-      // Upsert the user's settings document (creates if not exists, updates if exists)
+      // Upsert the user's settings document
       const settingsDoc = {
         id: `settings-${userId}`,
         userId,
@@ -60,12 +73,13 @@ app.http("updateSettingsForUser", {
         updatedAt: new Date().toISOString(),
       };
 
-     const { resource } = await container.items.upsert(settingsDoc, { partitionKey: userId });
+      const { resource } = await container.items.upsert(settingsDoc, { partitionKey: userId });
 
       context.log("Settings updated for user:", resource);
 
       return {
         status: 200,
+        headers: { "Access-Control-Allow-Origin": "*" },
         jsonBody: resource,
       };
     } catch (error) {
@@ -73,6 +87,7 @@ app.http("updateSettingsForUser", {
 
       return {
         status: 500,
+        headers: { "Access-Control-Allow-Origin": "*" },
         jsonBody: {
           message: error.message,
           details: error.response?.body || null,

@@ -3,7 +3,7 @@ const { CosmosClient } = require("@azure/cosmos");
 
 app.http("getSettingsForUser", {
   methods: ["GET"],
-  authLevel: "function",
+  authLevel: "anonymous",
   handler: async (request, context) => {
     context.log("getSettingsForUser called"); // log function call
 

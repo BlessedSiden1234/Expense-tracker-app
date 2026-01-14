@@ -2,10 +2,22 @@ const { app } = require("@azure/functions");
 const { CosmosClient } = require("@azure/cosmos");
 
 app.http("createSettingsForUser", {
-  methods: ["POST"],
-  authLevel: "function",
+  methods: ["POST", "OPTIONS"], // ✅ include OPTIONS for preflight
+  authLevel: "anonymous",
   handler: async (request, context) => {
-    context.log("createSettingsForUser called with body:", request.body);
+    context.log("createSettingsForUser called");
+
+    // ✅ Handle CORS preflight
+    if (request.method === "OPTIONS") {
+      return {
+        status: 204,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "POST, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type",
+        },
+      };
+    }
 
     try {
       const body = await request.json();
@@ -13,9 +25,9 @@ app.http("createSettingsForUser", {
         userId,
         font = "sans-serif",
         mode = "day",
-        currency = "Indian Rupees",
+        currency = "US Dollars",
         travelMode = "off",
-        fromCurrency = "Indian Rupees",
+        fromCurrency = "US Dollars",
         monthLimit = 15000,
         editedCategories = {
           Food: "",
@@ -36,6 +48,7 @@ app.http("createSettingsForUser", {
       if (!userId) {
         return {
           status: 400,
+          headers: { "Access-Control-Allow-Origin": "*" },
           jsonBody: { error: "Missing userId" },
         };
       }
@@ -64,6 +77,7 @@ app.http("createSettingsForUser", {
 
       return {
         status: 201,
+        headers: { "Access-Control-Allow-Origin": "*" },
         jsonBody: resource,
       };
     } catch (error) {
@@ -71,6 +85,7 @@ app.http("createSettingsForUser", {
 
       return {
         status: 500,
+        headers: { "Access-Control-Allow-Origin": "*" },
         jsonBody: {
           message: error.message,
           details: error.response?.body || null,

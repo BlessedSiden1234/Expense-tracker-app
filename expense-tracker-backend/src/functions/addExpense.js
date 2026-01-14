@@ -2,9 +2,22 @@ const { app } = require("@azure/functions");
 const { CosmosClient } = require("@azure/cosmos");
 
 app.http("addExpense", {
-  methods: ["POST"],
-  authLevel: "function",
+  methods: ["POST", "OPTIONS"],
+  authLevel: "anonymous",
   handler: async (request, context) => {
+
+    // ✅ Handle CORS preflight
+    if (request.method === "OPTIONS") {
+      return {
+        status: 204,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "POST, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type",
+        },
+      };
+    }
+
     context.log("addExpense called");
 
     try {
@@ -15,15 +28,16 @@ app.http("addExpense", {
         expense,
         category,
         comments = "",
-        day
+        day,
       } = body;
 
       if (!userId || !date || expense == null || !category) {
         return {
           status: 400,
+          headers: { "Access-Control-Allow-Origin": "*" },
           jsonBody: {
-            error: "Missing fields (userId, date, expense, or category)"
-          }
+            error: "Missing fields (userId, date, expense, or category)",
+          },
         };
       }
 
@@ -47,7 +61,7 @@ app.http("addExpense", {
           userId,
           type: "expenseTable",
           items: [],
-          createdAt: new Date().toISOString()
+          createdAt: new Date().toISOString(),
         };
       }
 
@@ -58,27 +72,29 @@ app.http("addExpense", {
         category,
         comments,
         day,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
       };
 
       expenseTable.items.push(newExpense);
       expenseTable.updatedAt = new Date().toISOString();
 
       await container.items.upsert(expenseTable, {
-        partitionKey: userId
+        partitionKey: userId,
       });
 
       return {
         status: 201,
-        jsonBody: newExpense
+        headers: { "Access-Control-Allow-Origin": "*" },
+        jsonBody: newExpense,
       };
 
     } catch (error) {
       context.log("❌ addExpense error:", error);
       return {
         status: 500,
-        jsonBody: { error: error.message }
+        headers: { "Access-Control-Allow-Origin": "*" },
+        jsonBody: { error: error.message },
       };
     }
-  }
+  },
 });

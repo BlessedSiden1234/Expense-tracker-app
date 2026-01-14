@@ -2,10 +2,22 @@ const { app } = require("@azure/functions");
 const { CosmosClient } = require("@azure/cosmos");
 
 app.http("addLoan", {
-  methods: ["POST"],
-  authLevel: "function",
+  methods: ["POST", "OPTIONS"], // ✅ include OPTIONS for preflight
+  authLevel: "anonymous",
   handler: async (request, context) => {
     context.log("addLoan called");
+
+    // ✅ Handle CORS preflight
+    if (request.method === "OPTIONS") {
+      return {
+        status: 204,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "POST, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type",
+        },
+      };
+    }
 
     try {
       const body = await request.json();
@@ -13,7 +25,7 @@ app.http("addLoan", {
         userId,
         lender,
         amount,
-        loanType = "Given",        // ✅ Added loanType with default
+        loanType = "Given",
         interestRate = 0,
         startDate,
         endDate = null,
@@ -25,6 +37,7 @@ app.http("addLoan", {
       if (!userId || !lender || amount == null || !startDate) {
         return {
           status: 400,
+          headers: { "Access-Control-Allow-Origin": "*" },
           jsonBody: {
             error: "Missing fields (userId, lender, amount, or startDate)"
           }
@@ -58,13 +71,13 @@ app.http("addLoan", {
         id: `loan-${Date.now()}`,
         lender,
         amount,
-        loanType,                 // ✅ Include loanType here
+        loanType,
         interestRate,
         startDate,
         endDate,
-        status,                   // active | paid | overdue
+        status,
         notes,
-        day: new Date(startDate).getDay(), // optional, useful for frontend
+        day: new Date(startDate).getDay(), // optional
         createdAt: new Date().toISOString()
       };
 
@@ -77,6 +90,7 @@ app.http("addLoan", {
       // ---- Return JSON response ----
       return {
         status: 201,
+        headers: { "Access-Control-Allow-Origin": "*" },
         jsonBody: {
           message: "Loan saved successfully",
           loan: newLoan
@@ -87,6 +101,7 @@ app.http("addLoan", {
       context.log("❌ addLoan error:", error);
       return {
         status: 500,
+        headers: { "Access-Control-Allow-Origin": "*" },
         jsonBody: { error: error.message }
       };
     }

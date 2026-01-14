@@ -2,10 +2,22 @@ const { app } = require("@azure/functions");
 const { CosmosClient } = require("@azure/cosmos");
 
 app.http("getExpenses", {
-  methods: ["GET", "POST"],
-  authLevel: "function",
+  methods: ["GET", "POST", "OPTIONS"], // ✅ include OPTIONS for preflight
+  authLevel: "anonymous",
   handler: async (request, context) => {
     context.log("getExpenses called");
+
+    // ✅ Handle CORS preflight
+    if (request.method === "OPTIONS") {
+      return {
+        status: 204,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type",
+        },
+      };
+    }
 
     try {
       // Get userId from query or POST body
@@ -16,6 +28,7 @@ app.http("getExpenses", {
       if (!userId) {
         return {
           status: 400,
+          headers: { "Access-Control-Allow-Origin": "*" },
           jsonBody: { error: "Missing userId parameter" },
         };
       }
@@ -38,6 +51,7 @@ app.http("getExpenses", {
         // No expense table exists yet
         return {
           status: 200,
+          headers: { "Access-Control-Allow-Origin": "*" },
           jsonBody: [],
         };
       }
@@ -51,12 +65,14 @@ app.http("getExpenses", {
 
       return {
         status: 200,
+        headers: { "Access-Control-Allow-Origin": "*" },
         jsonBody: sortedExpenses,
       };
     } catch (error) {
       context.log("❌ getExpenses error:", error);
       return {
         status: 500,
+        headers: { "Access-Control-Allow-Origin": "*" },
         jsonBody: { error: error.message },
       };
     }
