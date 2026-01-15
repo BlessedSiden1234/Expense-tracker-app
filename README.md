@@ -131,9 +131,10 @@ COSMOS_CONNECTION=AccountEndpoint=...;AccountKey=...
 ---
 
 ### Clone Repository
-bash
+```bash
 git clone https://github.com/BlessedSiden1234/Expense-tracker-app.git
 cd expense-tracker/backend
+```
 
 ### 6️⃣ Run Backend Locally
 
@@ -173,10 +174,17 @@ REACT_APP_API_BASE_URL=https://<your-function-app>.azurewebsites.net/api
 
 ## 🖼️ Frontend Screenshots
 
-- `/screenshots/frontend/login.png`
-- `/screenshots/frontend/dashboard.png`
-- `/screenshots/frontend/add-expense.png`
-- `/screenshots/frontend/charts.png`
+**Home Page**  
+![Home Page](screenshots/frontend/track-home.png)
+
+**Login Page**  
+![Login Page](screenshots/frontend/track-login.png)
+
+**Settings Page**  
+![Settings Page](screenshots/frontend/track-settings.png)
+
+**Statistics Page**  
+![Statistics Page](screenshots/frontend/track-statistics.png)
 
 ---
 
