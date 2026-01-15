@@ -133,7 +133,6 @@ COSMOS_CONNECTION=AccountEndpoint=...;AccountKey=...
 ### Clone Repository
 ```bash
 git clone https://github.com/BlessedSiden1234/Expense-tracker-app.git
-cd expense-tracker/backend
 ```
 
 ### 6️⃣ Run Backend Locally
